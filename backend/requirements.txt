@@ -6,4 +6,5 @@ adafruit-circuitpython-htu21d
 SQLAlchemy
 uvicorn
 plotly
+syncer
 dash

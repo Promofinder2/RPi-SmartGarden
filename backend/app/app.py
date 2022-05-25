@@ -10,6 +10,8 @@ def root():
 
 
 app.include_router(DS18B20.router)
+
+
 origins = [
     'http://localhost:3000',
     'http://localhost:3001',

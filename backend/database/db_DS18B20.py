@@ -18,7 +18,8 @@ def create(db:Session, request: database_DS18B20):
     return new_readings
 
 def get_all(db:Session):
-    return db.query(database_DS18B20).all()
+    query_response =db.query(database_DS18B20).all() 
+    return query_response
 
 
 
