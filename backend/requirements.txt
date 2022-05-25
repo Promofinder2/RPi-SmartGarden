@@ -1,0 +1,6 @@
+fastapi
+pydantic
+pandas
+RPi.GPIO
+adafruit-circuitpython-htu21d
+SQLAlchemy
