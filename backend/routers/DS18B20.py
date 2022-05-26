@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status, Depends, UploadFile, File
 from fastapi.exceptions import HTTPException
+from fastapi_utils.tasks import repeat_every
 from sqlalchemy.orm import Session
 from routers.schemas import DS18B20
 from database.db import get_db
@@ -13,7 +14,6 @@ from adafruit_htu21d import HTU21D
 import datetime
 from enum import Enum
 import asyncio
-
 os.system('sudo modprobe w1-gpio')
 os.system('sudo modprobe w1-therm')
 base_dir = '/sys/bus/w1/devices/'
@@ -63,24 +63,16 @@ async def create(db: Session = Depends(get_db)):
     for reading in [res1,res2]:
         db_DS18B20.create(db,reading)
     
-    print(res1,'\n\n',res2)
-    print('\n\n', "Test Successful... maybe")
-
-    return True
 
 
 @router.get('/all',response_model=List[DS18B20])
 async def readings(db: Session= Depends(get_db)):
-    
     res1,res2 = await log_temperature()
     dbase = db_DS18B20.get_all(db)
-    
-    print('**************TESTING BEEP******************')
     dbase.append(res1)
     dbase.append(res2)
-
-    
     return dbase
+
 
 async def log_temperature():
     ds18b20 = read_temp()

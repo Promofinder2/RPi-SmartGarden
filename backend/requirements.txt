@@ -8,3 +8,4 @@ uvicorn
 plotly
 syncer
 dash
+fastapi-utils

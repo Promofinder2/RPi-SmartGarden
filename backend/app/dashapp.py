@@ -26,9 +26,7 @@ def process_data():
 
     df=pd.DataFrame(ds18b20_request_dict_list)
 
-    
-
-    fig=px.scatter(df,x='timestamp', y='temperature_Farenheit',facet_col='measurement_id')
+    fig=px.scatter(df[15::],x='timestamp', y='temperature_Farenheit',facet_col='measurement_id')
     fig.show()
 
 
