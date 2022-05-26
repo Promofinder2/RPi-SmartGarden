@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/home/pi/github-Projects/RPi-SmartGarden/RPi-SmartGarden/backend/')
 import dash
 from fastapi import Depends
 from sqlalchemy.orm.session import Session
@@ -7,7 +9,6 @@ import importlib
 import flask
 import pandas as pd
 import os
-os.chdir('backend')
 import plotly as plt
 import plotly.express as px
 from database import db_DS18B20
@@ -16,6 +17,8 @@ from database.db import get_db
 from routers import DS18B20
 import asyncio
 from typing import List
+
+
 
 def fetch_data_ds18b20():
     dbase2 = database_DS18B20.query.all()

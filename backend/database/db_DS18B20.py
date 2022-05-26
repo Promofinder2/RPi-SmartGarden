@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from routers.schemas import DS18B20
 from sqlalchemy.orm.session import Session
-from database.models import database_DS18B20
+from .models import database_DS18B20
 import datetime
 
 def create(db:Session, request: database_DS18B20):
