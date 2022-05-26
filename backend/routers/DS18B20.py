@@ -10,7 +10,6 @@ from typing import List
 import os
 import RPi.GPIO as GPIO
 import board
-from adafruit_htu21d import HTU21D
 import datetime
 from enum import Enum
 import asyncio
@@ -22,35 +21,22 @@ for f in os.listdir(base_dir):
     if '28' in f:
         device_folder= base_dir+f+'/'
         sensor_files.append(device_folder+'w1_slave')
-
-def read_temp_htu21d():
-    i2c = board.I2C()
-    sensor = HTU21D(i2c)
-    temp = sensor.temperature
-    hum = sensor.relative_humidity
-
-    return [temp,hum]
 def read_temp_raw():
     lines = []
     for sensor in sensor_files:
         f=open(sensor,'r')
         lines.append(f.readlines())
         f.close()
-
     return lines
 def read_temp():
     lines = read_temp_raw()
     temperature_readings=[]
     for i,line in enumerate(lines):
-        
         txt=line[1]
         split_txt = txt.split('t=')
         probe_temp=split_txt[1][0:5]
         temperature_readings.append(probe_temp)
-
     return temperature_readings
-
-
 
 router = APIRouter(
     prefix='/sensor_readings',
@@ -63,8 +49,6 @@ async def create(db: Session = Depends(get_db)):
     for reading in [res1,res2]:
         db_DS18B20.create(db,reading)
     
-
-
 @router.get('/all',response_model=List[DS18B20])
 async def readings(db: Session= Depends(get_db)):
     res1,res2 = await log_temperature()
@@ -72,7 +56,6 @@ async def readings(db: Session= Depends(get_db)):
     dbase.append(res1)
     dbase.append(res2)
     return dbase
-
 
 async def log_temperature():
     ds18b20 = read_temp()

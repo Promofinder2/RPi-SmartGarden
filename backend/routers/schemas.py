@@ -13,7 +13,6 @@ class DS18B20(pydantic.BaseModel):
 class HTU21D(pydantic.BaseModel):
     timestamp : Optional[str]
     measurement_id : Optional[str]
-    temperature_Celcius : Optional[float]
     temperature_Farenheit : Optional[float]
     relative_humidity : Optional[float]
     class Config():

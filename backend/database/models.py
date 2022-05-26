@@ -25,9 +25,7 @@ class database_HTU21D(Base):
     __table_args__ = {'extend_existing':True}
     id=Column(Integer,primary_key=True,index=True)
     timestamp =Column( String)
-    raw_input =Column( String)
     measurement_id =Column( String)
-    temperature_Celcius =Column( Float)
     temperature_Farenheit =Column( Float)
     relative_humidity =Column( Float)
 
