@@ -18,7 +18,7 @@ app.include_router(DS18B20.router)
 
 
 @app.on_event("startup")
-@repeat_every(seconds=60*5,wait_first=False)
+@repeat_every(seconds=60*.5,wait_first=False)
 async def take_readings() -> None:
     res1,res2 = await DS18B20.log_temperature()
     with sessionmaker.context_session() as db:
