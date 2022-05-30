@@ -1,3 +1,7 @@
+from asyncore import read
+import threading
+import time
+time.sleep(2)
 import sys
 sys.path.append('/home/pi/github-Projects/RPi-SmartGarden/RPi-SmartGarden/backend/')
 import dash
@@ -13,10 +17,35 @@ import plotly as plt
 import plotly.express as px
 from database import db_DS18B20
 from database.models import database_DS18B20,database_HTU21D
+import cv2
 from database.db import get_db
 from routers import DS18B20
 import asyncio
+from quart import Quart, websocket
 from typing import List
+import base64
+import threading
+from dash_extensions import WebSocket
+global cap
+global ret
+global img
+delay_between_frames=0.05
+server = Quart(__name__)
+
+@server.websocket("/stream")
+async def stream_capture():
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH,1920)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT,1080)
+    while True:
+        try:
+            if delay_between_frames is not None:
+                await asyncio.sleep(delay=delay_between_frames)
+            frame = cap.get_frame()
+            await websocket.send(f"data:image/jpeg;base64, {base64.b64encode(frame).decode()}")
+        except AssertionError as e:
+            print(e)
+
 
 
 
@@ -55,10 +84,14 @@ def serve_layout():
 html.H1("SMART GARDEN V0.1",style={'text-align':'center'}),
 html.H3("DS18B20 TEMPERATURE PROBE READINGS",style={'text-align':'center'}),
 dcc.Graph(figure=fig),html.H3("HTU21D TEMPERATURE HUMIDITY SENSOR READINGS",style={'text-align':'center'}),
-dcc.Graph(figure=process_data_htu21d())
+dcc.Graph(figure=process_data_htu21d()),
+html.H2("Streaming",style={'text-align':'center'}),
+html.Img(id='video_stream'), WebSocket(url=f"ws://127.0.0.1:5000/stream",id="ws")
 ])
 
 Dapp.layout= serve_layout
+Dapp.clientside_callback("function(m){return m? m.data : '';}",Output(f"video_stream","src"), Input(f"ws","message"))
+
 if __name__ == '__main__':
 
     Dapp.run_server("192.168.50.172",8050,debug=False)

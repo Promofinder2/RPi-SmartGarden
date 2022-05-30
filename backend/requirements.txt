@@ -10,3 +10,5 @@ syncer
 dash
 opencv-python
 fastapi-utils
+quart
+dash-extensions
