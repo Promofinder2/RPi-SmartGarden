@@ -12,3 +12,5 @@ opencv-python
 fastapi-utils
 quart
 dash-extensions
+Adafruit_ADS1x15
+smbus

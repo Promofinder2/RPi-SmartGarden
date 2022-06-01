@@ -90,14 +90,14 @@ def take_10_pics():
 
 
 def main():
+    x=0
     while True:
-        x=0
         if x < 48:
             take_10_pics()
             time.sleep(60*30)
         print(f'{x} photos have been taken')
         x+=1
-        if x >=48:
+        if x >=96:
             break
 
 if __name__ == '__main__':
